@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -exo pipefail
 
 if [ "$1" = "" ]; then
   echo "Usage: $0 <target_dir> [arch]"
@@ -8,6 +7,8 @@ if [ "$1" = "" ]; then
   echo "  arch: x64 | unix | x86 default: unix"
   exit 1
 fi
+
+set -exo pipefail
 
 # set variables
 TARGET_DIR=$1
@@ -46,27 +47,31 @@ echo "Cleaning up"
 rm "BepInEx_${ARCH}_${BEPINEX_FULL_VERSION}.zip"
 rm "XUnity.AutoTranslator-BepInEx-${AUTO_TRANSLATOR_VERSION}.zip"
 
-# edit run_bepinex.sh
-if [ "$ARCH" = "unix" ]; then
-  BEPINEX_SH="$TARGET_DIR/run_bepinex.sh"
-
-  # found x86_64 app
-  if [ "$APP_NAME" = "" ]; then
-    APP_NAME=$(find "$TARGET_DIR" -name '*.x86_64' -type f -print -quit)
-  fi
-  if [ "$APP_NAME" = "" ]; then
-    echo "Could not find executable_name"
-    exit 1
-  fi
-
-  echo "APP_NAME: $APP_NAME"
-  if grep -q "$APP_NAME" "$BEPINEX_SH"; then
-    echo "Skipping executable_name changes, already replaced"
-  else
-    sed "/executable_name=\"\".*/ s/\"\"/\"$APP_NAME\"/" "$BEPINEX_SH" > "$BEPINEX_SH.tmp"
-    mv "$BEPINEX_SH.tmp" "$BEPINEX_SH"
-  fi
-  chmod +x "$BEPINEX_SH"
-  "$BEPINEX_SH"
+if [ "$ARCH" != "unix" ]; then
+  exit 0
 fi
-exit 0
+
+# edit run_bepinex.sh
+BEPINEX_SH="$TARGET_DIR/run_bepinex.sh"
+
+# found x86_64 app
+if [ "$APP_NAME" = "" ]; then
+  APP_NAME=$(find "$TARGET_DIR" -name '*.x86_64' -type f -print -quit)
+fi
+if [ "$APP_NAME" = "" ]; then
+  echo "Could not find executable_name"
+  exit 1
+fi
+
+echo "APP_NAME: $APP_NAME"
+if grep -q "$APP_NAME" "$BEPINEX_SH"; then
+  echo "Skipping executable_name changes, already replaced"
+else
+  sed "/executable_name=\"\".*/ s/\"\"/\"$APP_NAME\"/" "$BEPINEX_SH" > "$BEPINEX_SH.tmp"
+  mv "$BEPINEX_SH.tmp" "$BEPINEX_SH"
+fi
+chmod +x "$BEPINEX_SH"
+"$BEPINEX_SH"
+set +x
+echo "see below link for steam setting:"
+echo "https://docs.bepinex.dev/articles/advanced/steam_interop.html"
