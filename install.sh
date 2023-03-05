@@ -28,9 +28,9 @@ mkdir -p "$TARGET_DIR/BepInEx/config"
 cp AutoTranslatorConfig.ini "$TARGET_DIR/BepInEx/config/AutoTranslatorConfig.ini"
 
 if [ "$APP_NAME" = "" ]; then
-  cp "ridibatang_sdf" "$TARGET_DIR/."
+  cp "fonts/ridibatang_sdf" "$TARGET_DIR/."
 else
-  cp "ridibatang_sdf" "$TARGET_DIR/$APP_NAME/."
+  cp "fonts/ridibatang_sdf" "$TARGET_DIR/$APP_NAME/."
 fi
 
 # download and extract
