@@ -18,7 +18,7 @@ ARCH=${2:-unix}
 BEPINEX_VERSION=5.4.21
 BEPINEX_FULL_VERSION=5.4.21.0
 # https://github.com/bbepis/XUnity.AutoTranslator/tags
-AUTO_TRANSLATOR_VERSION=5.2.0
+AUTO_TRANSLATOR_VERSION=5.3.0
 # found osx app
 APP_NAME=$(find "$TARGET_DIR" -name '*.app' -type d -print -quit)
 APP_NAME=$(basename "$APP_NAME")
